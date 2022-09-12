@@ -42,7 +42,7 @@ def get_vedios_list(url,wd,num):
         wd.get(url)
         video_sections = []
         while len(video_sections) < num:
-            wd.execute_script("window.scrollBy(0,100)", "")
+            wd.execute_script("window.scrollBy(0,300)", "")
             video_sections = wd.find_elements(By.ID, "video-title")
 
         vedio_details_list = []
@@ -59,12 +59,12 @@ def get_vedios_list(url,wd,num):
                 "vedio_id": link.split('=')[-1]
 
             }
-            #print(details)
+            print(details)
             vedio_details_list.append(details)
         df = pd.DataFrame(vedio_details_list[0:num], columns=['vedio_id', 'vedio_title', 'vedio_link', 'vedio_views',
                                                               'vedio_thumbnail_url', 'vedio_description',
                                                               'channel_link'])
-
+        time.sleep(10)
         wd.find_element(By.XPATH, '//*[@id="tabsContent"]/tp-yt-paper-tab[6]').click()
         time.sleep(33)
         user = wd.find_elements(By.XPATH, '//*[@id="meta"]')[0].text
@@ -100,6 +100,7 @@ def comment_likes(vedio_link, wd):
             c = i.find_element(By.ID, "comment-content").text
             cm = {'Name': name,
                   'Comment': c}
+            print(cm)
             cmnt_list.append(cm)
             time.sleep(10)
         #print(cmnt_list)
