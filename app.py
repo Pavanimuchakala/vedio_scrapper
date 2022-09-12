@@ -64,9 +64,11 @@ def get_vedios_list(url,wd,num):
         wd.get(url)
 
         video_sections = []
+        wd.execute_script("window.scrollBy(0,100)", "")
         while len(video_sections) < num:
             wd.execute_script("window.scrollBy(0,100)", "")
             video_sections = wd.find_elements(By.ID, "video-title")
+            time.sleep(5)
 
         vedio_details_list = []
         for i in video_sections[0:num]:
@@ -98,12 +100,12 @@ def comment_likes(vedio_link, wd):
     and update them in the snowflake and mongodb'''
     try:
         wd.get(vedio_link)
-        time.sleep(0.5)
+        time.sleep(5)
         comments = wd.find_elements(By.XPATH, '//*[@id="contents"]/ytd-comment-thread-renderer')
         while len(comments) == 0:
             wd.execute_script("window.scrollBy(0,100)", "")
             comments = wd.find_elements(By.XPATH, '//*[@id="contents"]/ytd-comment-thread-renderer')
-            time.sleep(1)
+            time.sleep(5)
         cmnt_list = []
         for i in comments:
             name = i.find_element(By.ID, 'header-author').text.split('\n')[0]
@@ -111,7 +113,7 @@ def comment_likes(vedio_link, wd):
             cm = {'Name': name,
                   'Comment': c}
             cmnt_list.append(cm)
-            time.sleep(0.2)
+            time.sleep(5)
         print(cmnt_list)
         vedio_rating = wd.find_elements(By.XPATH, '//*[@id="top-level-buttons-computed"]/ytd-toggle-button-renderer[1]/a')[0].text
         df1 = pd.DataFrame(cmnt_list, columns=['Name', 'Comment'])
@@ -314,6 +316,7 @@ def index():
             user_dict=channe_details_dict(url1,wd)
             print(user_dict)
             #num=4
+            time.sleep(5)
             wd = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
             df_vedios=get_vedios_list(url1,wd,num)
             print(df_vedios)
@@ -331,6 +334,7 @@ def index():
                 comnt_dict = {'vedio_link': i,
                               'comment_list': l[0]}
                 collection02.insert_one(comnt_dict)
+                time.sleep(5)
 
             df2 = pd.DataFrame(list1, columns=['vedio_link', 'vedio_likes',])
             print(df2)
