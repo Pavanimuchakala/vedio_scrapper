@@ -38,8 +38,9 @@ print(s3)
 def get_vedios_list(url,wd,num):
     '''This function is used to get the list of the required vedios and details of youtube user'''
     try:
-        # url = 'https://www.youtube.com/user/krishnaik06/videos'
+       
         wd.get(url)
+        time.sleep(3)
         video_sections = []
         while len(video_sections) < num:
             wd.execute_script("window.scrollBy(0,300)", "")
@@ -76,7 +77,7 @@ def get_vedios_list(url,wd,num):
         }
 
 
-        return [df[0:num],user_details_dict]
+        return ([df[0:num],user_details_dict])
 
     except Exception as e:
         print("something went wrong while fetching vedios details: "+str(e))
@@ -300,12 +301,12 @@ def index():
 
             wd = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
             
-            #url1 = 'https://www.youtube.com/user/krishnaik06/videos'
+            
             #wd = webdriver.Chrome("chromedriver.exe")
 
             l1=[]
             l1=get_vedios_list(url1,wd,num)
-            df_vedios=l1[0]
+            df_vedios=pd.DataFrame(l1[0])
             user_dict=l1[1]
             print(df_vedios)
             list1=[]
