@@ -14,7 +14,7 @@
 
 <body>
   <h4 >
-  GITHUB LINK: <a href='https://github.com/Pavanimuchakala/vedio_scrapper_yt'> 'https://github.com/Pavanimuchakala/vedio_scrapper_yt'</a>
+  GITHUB LINK: <a href='https://github.com/Pavanimuchakala/vedio_scrapper_yt'> GITHUB LINK</a>
   <div class="table-users">
    <div class="header">Channel Details</div>
 
@@ -50,10 +50,10 @@
          {% for review in reviews[0] %}
       <tr>
           <td>{{review['vedio_title']}}</td>
-         <td>{{review['vedio_link']}}</td>
+          <td><a href={{reviews[1]['vedio_link']}}> {{reviews[1]['vedio_link']}}</a></td>
          <td>{{review['vedio_views']}}</td>
          <td>{{review['vedio_likes']}}</td>
-         <td>{{review['vedio_thumbnail_url']}} </td>
+          <td><a href={{reviews[1]['vedio_thumbnail_url']}}> {{reviews[1]['vedio_thumbnail_url']}}</a></td>
 		 <td><form action="{{ url_for('comntss') }}" method="POST">
         <input id="commnt" name="commnt" type="hidden" value="{{review['vedio_link']}}">
         <button type="submit"> comments </button>
