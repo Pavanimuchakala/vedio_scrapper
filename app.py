@@ -66,7 +66,7 @@ def get_vedios_list(url,wd,num):
                                                               'channel_link'])
 
         wd.find_element(By.XPATH, '//*[@id="tabsContent"]/tp-yt-paper-tab[6]').click()
-        time.sleep(3)
+        time.sleep(33)
         user = wd.find_elements(By.XPATH, '//*[@id="meta"]')[0].text
         user_details_dict = {
             'channel_link': url,
@@ -87,11 +87,11 @@ def comment_likes(vedio_link, wd):
     try:
         wd.get(vedio_link)
         wd.execute_script("window.scrollBy(0,300)", "")
-        time.sleep(5)
+        time.sleep(10)
         comments = wd.find_elements(By.XPATH, '//*[@id="contents"]/ytd-comment-thread-renderer')
         while len(comments) == 0:
             wd.execute_script("window.scrollBy(0,100)", "")
-            time.sleep(5)
+            time.sleep(10)
             comments = wd.find_elements(By.XPATH, '//*[@id="contents"]/ytd-comment-thread-renderer')
 
         cmnt_list = []
@@ -101,7 +101,7 @@ def comment_likes(vedio_link, wd):
             cm = {'Name': name,
                   'Comment': c}
             cmnt_list.append(cm)
-            time.sleep(0.2)
+            time.sleep(10)
         #print(cmnt_list)
         vedio_rating = wd.find_elements(By.XPATH, '//*[@id="top-level-buttons-computed"]/ytd-toggle-button-renderer[1]/a')[0].text
         df1 = pd.DataFrame(cmnt_list, columns=['Name', 'Comment'])
