@@ -61,7 +61,7 @@ def get_vedios_list(url,wd,num):
 
             }
             print(details)
-            vedio_details_list.append(details)
+            vedio_details_list=vedio_details_list+[details]
         df = pd.DataFrame(vedio_details_list[0:num], columns=['vedio_id', 'vedio_title', 'vedio_link', 'vedio_views',
                                                               'vedio_thumbnail_url', 'vedio_description',
                                                               'channel_link'])
@@ -102,7 +102,7 @@ def comment_likes(vedio_link, wd):
             cm = {'Name': name,
                   'Comment': c}
             print(cm)
-            cmnt_list.append(cm)
+            cmnt_list=cmnt_list+[cm]
             time.sleep(10)
         #print(cmnt_list)
         vedio_rating = wd.find_elements(By.XPATH, '//*[@id="top-level-buttons-computed"]/ytd-toggle-button-renderer[1]/a')[0].text
