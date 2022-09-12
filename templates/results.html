@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Vedios</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+      <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+</head>
+
+<body>
+  <h4 >
+  GITHUB LINK: <a href='https://github.com/Pavanimuchakala/vedio_scrapper_yt'> 'https://github.com/Pavanimuchakala/vedio_scrapper_yt'</a>
+  <div class="table-users">
+   <div class="header">Channel Details</div>
+
+   <table cellspacing="0">
+      <tr>
+         <th>Channel_name</th>
+         <th>Channel_link</th>
+         <th>Subscribers</th>
+        </tr>
+
+      <tr>
+          <td>{{reviews[1]['channel_name']}}</td>
+         <td><a href={{reviews[1]['channel_link']}}> {{reviews[1]['channel_link']}}</a></td>
+         <td>{{reviews[1]['subscribers']}}</td>
+        <tr>
+   </table>
+</div>
+
+
+  </h4>
+
+   <div class="table-users">
+   <div class="header">vedios_list</div>
+   <table cellspacing="0">
+      <tr>
+         <th>vedio_title</th>
+         <th>Vedio_link</th>
+         <th>Vedio_views</th>
+         <th>Vedio_likes</th>
+		 <th>Vedio_thumbnail_url</th>
+         <th>Comments</th>
+      </tr>
+         {% for review in reviews[0] %}
+      <tr>
+          <td>{{review['vedio_title']}}</td>
+         <td>{{review['vedio_link']}}</td>
+         <td>{{review['vedio_views']}}</td>
+         <td>{{review['vedio_likes']}}</td>
+         <td>{{review['vedio_thumbnail_url']}} </td>
+		 <td><form action="{{ url_for('comntss') }}" method="POST">
+        <input id="commnt" name="commnt" type="hidden" value="{{review['vedio_link']}}">
+        <button type="submit"> comments </button>
+                </form> </td>
+       {% endfor %}
+   </table>
+</div>
+
+
+
+</body>
+
+</html>

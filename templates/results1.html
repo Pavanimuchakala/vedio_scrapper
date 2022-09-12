@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Comments</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+      <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+</head>
+
+<body>
+  <a href='https://github.com/Pavanimuchakala/vedio_scrapper_yt'> GITHUB LINK</a>
+  <div class="table-users">
+   <div class="header">Comments List</div>
+
+   <table cellspacing="0">
+      <tr>
+         <th>Name</th>
+         <th>Comment</th>
+      </tr>
+         {% for review in commentss %}
+      <tr>
+          <td>{{review['Name']}}</td>
+         <td>{{review['Comment']}}</td>
+
+       {% endfor %}
+   </table>
+</div>
+
+
+
+</body>
+
+</html>
