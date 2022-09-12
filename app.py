@@ -314,12 +314,14 @@ def index():
             user_dict=channe_details_dict(url1,wd)
             print(user_dict)
             #num=4
+            wd = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
             df_vedios=get_vedios_list(url1,wd,num)
             print(df_vedios)
             list1=[]
             df=df_vedios.copy()
             vedio_lst = df['vedio_link'].to_list()
             for i in vedio_lst:
+                wd = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
                 l = comment_likes(i, wd)
                 print(l)
                 list1.append({'vedio_link': i, 'vedio_likes': l[1]})
