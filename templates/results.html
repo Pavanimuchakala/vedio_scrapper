@@ -50,10 +50,10 @@
          {% for review in reviews[0] %}
       <tr>
           <td>{{review['vedio_title']}}</td>
-          <td><a href={{reviews[1]['vedio_link']}}> {{reviews[1]['vedio_link']}}</a></td>
+          <td><a href={{review['vedio_link']}}> {{review['vedio_link']}}</a></td>
          <td>{{review['vedio_views']}}</td>
          <td>{{review['vedio_likes']}}</td>
-          <td><a href={{reviews[1]['vedio_thumbnail_url']}}> {{reviews[1]['vedio_thumbnail_url']}}</a></td>
+          <td><a href={{review['vedio_thumbnail_url']}}> {{review['vedio_thumbnail_url']}}</a></td>
 		 <td><form action="{{ url_for('comntss') }}" method="POST">
         <input id="commnt" name="commnt" type="hidden" value="{{review['vedio_link']}}">
         <button type="submit"> comments </button>

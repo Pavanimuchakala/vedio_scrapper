@@ -38,12 +38,11 @@ print(s3)
 def get_vedios_list(url,wd,num):
     '''This function is used to get the list of the required vedios and details of youtube user'''
     try:
-       
+        # url = 'https://www.youtube.com/user/krishnaik06/videos'
         wd.get(url)
-        time.sleep(3)
         video_sections = []
         while len(video_sections) < num:
-            wd.execute_script("window.scrollBy(0,300)", "")
+            wd.execute_script("window.scrollBy(0,100)", "")
             video_sections = wd.find_elements(By.ID, "video-title")
 
         vedio_details_list = []
@@ -60,14 +59,14 @@ def get_vedios_list(url,wd,num):
                 "vedio_id": link.split('=')[-1]
 
             }
-            print(details)
-            vedio_details_list=vedio_details_list+[details]
+            #print(details)
+            vedio_details_list.append(details)
         df = pd.DataFrame(vedio_details_list[0:num], columns=['vedio_id', 'vedio_title', 'vedio_link', 'vedio_views',
                                                               'vedio_thumbnail_url', 'vedio_description',
                                                               'channel_link'])
-        time.sleep(10)
+
         wd.find_element(By.XPATH, '//*[@id="tabsContent"]/tp-yt-paper-tab[6]').click()
-        time.sleep(33)
+        time.sleep(5)
         user = wd.find_elements(By.XPATH, '//*[@id="meta"]')[0].text
         user_details_dict = {
             'channel_link': url,
@@ -77,7 +76,7 @@ def get_vedios_list(url,wd,num):
         }
 
 
-        return ([df[0:num],user_details_dict])
+        return [df,user_details_dict]
 
     except Exception as e:
         print("something went wrong while fetching vedios details: "+str(e))
@@ -87,8 +86,8 @@ def comment_likes(vedio_link, wd):
     and update them in the snowflake and mongodb'''
     try:
         wd.get(vedio_link)
-        wd.execute_script("window.scrollBy(0,300)", "")
-        time.sleep(10)
+        wd.execute_script("window.scrollBy(0,800)", "")
+        time.sleep(30)
         comments = wd.find_elements(By.XPATH, '//*[@id="contents"]/ytd-comment-thread-renderer')
         while len(comments) == 0:
             wd.execute_script("window.scrollBy(0,100)", "")
@@ -101,9 +100,8 @@ def comment_likes(vedio_link, wd):
             c = i.find_element(By.ID, "comment-content").text
             cm = {'Name': name,
                   'Comment': c}
-            print(cm)
-            cmnt_list=cmnt_list+[cm]
-            time.sleep(10)
+            cmnt_list.append(cm)
+            time.sleep(2)
         #print(cmnt_list)
         vedio_rating = wd.find_elements(By.XPATH, '//*[@id="top-level-buttons-computed"]/ytd-toggle-button-renderer[1]/a')[0].text
         df1 = pd.DataFrame(cmnt_list, columns=['Name', 'Comment'])
@@ -177,17 +175,17 @@ def load_vediolistdetails(df2, user_dict,ctx, client):
         j1 = list(rec1)
         rec = []
         [rec.append(j) for j in j1]
-        #print(rec)
+        print(rec)
         collection = database1['vedios_description']
         collection.delete_many({'vedio_link': {'$in': df1['vedio_link'].to_list()}})
         collection.insert_many(df1.apply(lambda x: x.to_dict(), axis=1).to_list())
-        #print(df1['vedio_link'].to_list())
+        print(df1['vedio_link'].to_list())
         record = collection.find({'vedio_link': {'$in': df1['vedio_link'].to_list()}}, {'vedio_link': 1})
         x = list(record)
-        #print(x)
+        print(x)
         x1 = []
         [x1.append(j) for j in x]
-        #print(x1)
+        print(x1)
         df2['details_mongoid'] = df2['vedio_link'].apply(lambda a: [str(i['_id']) for i in x1 if i['vedio_link'] == a])
         #print(df2['details_mongoid'])
 
@@ -291,7 +289,7 @@ def index():
                 numd = 0
             else:
                 numd = int(numd)
-            
+            '''
             chrome_options = webdriver.ChromeOptions()
             chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 
@@ -300,13 +298,13 @@ def index():
             chrome_options.add_argument("--no-sandbox")
 
             wd = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-            
-            
-            #wd = webdriver.Chrome("chromedriver.exe")
+            '''
+            #url1 = 'https://www.youtube.com/user/krishnaik06/videos'
+            wd = webdriver.Chrome("chromedriver.exe")
 
             l1=[]
             l1=get_vedios_list(url1,wd,num)
-            df_vedios=pd.DataFrame(l1[0])
+            df_vedios=l1[0]
             user_dict=l1[1]
             print(df_vedios)
             list1=[]
@@ -316,12 +314,15 @@ def index():
                 l = comment_likes(i, wd)
                 #print(l)
                 list1.append({'vedio_link': i, 'vedio_likes': l[1]})
-                database1 = client['database1']
-                collection02 = database1['comments']
-                collection02.delete_many({'vedio_link': i})
-                comnt_dict = {'vedio_link': i,
-                              'comment_list': l[0]}
-                collection02.insert_one(comnt_dict)
+                try:
+                    database1 = client['database1']
+                    collection02 = database1['comments']
+                    collection02.delete_many({'vedio_link': i})
+                    comnt_dict = {'vedio_link': i,
+                                  'comment_list': l[0]}
+                    collection02.insert_one(comnt_dict)
+                except Exception as e:
+                    print(e)
 
             df2 = pd.DataFrame(list1, columns=['vedio_link', 'vedio_likes',])
             print(df2)
