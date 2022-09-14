@@ -64,7 +64,7 @@ def get_vedios_list(url,wd,num):
         df = pd.DataFrame(vedio_details_list[0:num], columns=['vedio_id', 'vedio_title', 'vedio_link', 'vedio_views',
                                                               'vedio_thumbnail_url', 'vedio_description',
                                                               'channel_link'])
-        time.sleep(30)
+        time.sleep(10)
         wd.find_element(By.XPATH, '//*[@id="tabsContent"]/tp-yt-paper-tab[6]').click()
         time.sleep(30)
         user = wd.find_elements(By.XPATH, '//*[@id="meta"]')[0].text
