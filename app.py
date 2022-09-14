@@ -289,7 +289,7 @@ def index():
                 numd = 0
             else:
                 numd = int(numd)
-            '''
+            
             chrome_options = webdriver.ChromeOptions()
             chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 
@@ -298,9 +298,9 @@ def index():
             chrome_options.add_argument("--no-sandbox")
 
             wd = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-            '''
+            
             #url1 = 'https://www.youtube.com/user/krishnaik06/videos'
-            wd = webdriver.Chrome("chromedriver.exe")
+            #wd = webdriver.Chrome("chromedriver.exe")
 
             l1=[]
             l1=get_vedios_list(url1,wd,num)
